@@ -14,12 +14,29 @@ data$date <- as.Date(data$date)
 ```{r}
 steps_per_day <- aggregate(data$steps, list(data$date), sum)
 names(steps_per_day) <- c("date","nr_of_steps")
+library(ggplot2)
+ggplot(steps_per_day, aes(date,nr_of_steps)) + geom_bar(stat="identity")
+mean(steps_per_day$nr_of_steps, na.rm=TRUE)
+median(steps_per_day$nr_of_steps, na.rm=TRUE)
 
+```
 
 
 ## What is the average daily activity pattern?
 
+```{r}
+agg <- aggregate(data$steps, by=list(data$interval), mean, na.rm=TRUE)
+names(agg) <- c("interval", "Avg_Steps")
+ggplot() + geom_line(data = data, aes(x=data$interval, y=data$steps)) + geom_point(data = agg, aes(x=agg$interval,y=agg$Avg_Steps))
+```
 
+### The interval with the maximum average of nr of steps over all days:
+
+```{r}
+agg[max(agg$Avg_Steps), ]
+
+
+```
 
 ## Imputing missing values
 
